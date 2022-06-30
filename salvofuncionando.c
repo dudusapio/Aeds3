@@ -34,7 +34,7 @@ int desemfileira() {
 }
 
 //Escopo funcao busca em largura
-void bfs(double * vet, int vertice);
+void bfs(double matrizAdjacencia[48][48], int vertice);
 
 //Variavel global
 int numerolinhas = 0;
@@ -88,15 +88,28 @@ int main (void){
 
         //Busca em Largura
 
-        vet = &matrizAdjacencia[0][0];
-        bfs(vet,4);
+        
+         //vet = malloc((numerolinhas * numerolinhas) * sizeof(double));
+        // for(i = 0;i < numerolinhas; i++){
+        //     for(int j = 0; j , numerolinhas;j++){
+        //         vet[i][j] = matrizAdjacencia[i][j];
+        //     }
+        // }
+        // FILE * testando = fopen("testando.txt","w");
+        // for(i = 0; i < numerolinhas;i++){
+        //     for(int j = 0;j < numerolinhas; j++){
+        //         fprintf(testando,"%.2lf",vet[i][j]);
+        //     }
+        // }
+        
+        bfs(matrizAdjacencia,5);
 
     }
 
 }
 
 
-void bfs(double * vet, int indiceVertice){
+void bfs(double matrizAdjacencia[48][48], int indiceVertice){
     char cor[numerolinhas];
     int pai[numerolinhas];
     int distancia[numerolinhas];
@@ -132,12 +145,12 @@ void bfs(double * vet, int indiceVertice){
     }
     printf("----------------------------------------\n\n");
     
+
     enfileira(indiceVertice);
     while (topo != -1){
         u = desemfileira();
         for(i = 0; i < numerolinhas;i++){
-            //Out[i * nc + j] vet[indiceVertice * numeroLinhas + i]
-            if(vet[indiceVertice * numerolinhas + i] != 0 && cor[i] == 'B'){ 
+            if(matrizAdjacencia[indiceVertice][i] != 0 && cor[i] == 'B'){ 
                 cor[i] = 'C';
                 distancia[i] = distancia[i] + 1;
                 pai[i] = indiceVertice;
@@ -148,14 +161,14 @@ void bfs(double * vet, int indiceVertice){
     }
     
     //Printa o vetor de cores
-    printf("Controle das Cores dos nós:\n");
+    printf("Controle das Cores dos nos:\n");
     for(i = 0;i < numerolinhas;i++){
         printf("cor[%d] = %c\n",i,cor[i]);
     }
     printf("----------------------------------------\n\n");
 
     //Printa o vetor de distância
-    printf("Controle das Distancias entre os nós:\n");
+    printf("Controle das Distancias entre os nos:\n");
     for(i = 0;i < numerolinhas;i++){
         printf("distancia[%d] = %d\n",i,distancia[i]);
     }
