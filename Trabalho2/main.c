@@ -4,7 +4,7 @@
 #include <string.h>
 
 void CriaVetoresAux(int quantVertices);
-void Inicializa(int s,int quantVertices,int dist[],int pai[]);
+void Inicializa(int s,int quantVertices);
 
 typedef struct {
     int chave;
@@ -54,12 +54,8 @@ int main (void){
 
         CriaVetoresAux(quantVertices);
 
-        Inicializa(0,quantVertices,dist,pai);
+        Inicializa(0,quantVertices);
 
-        for(int i = 0; i < quantVertices;i++){
-            printf("pai[%d] = %d\n",i,pai[i]);
-            
-        }
     }
 }
 
@@ -68,7 +64,7 @@ void CriaVetoresAux(int quantVertices){
     pai = malloc(quantVertices * sizeof(int));
 }
 
-void Inicializa(int s,int quantVertices,int dist[],int pai[]){
+void Inicializa(int s,int quantVertices){
     for(int i = 0; i < quantVertices;i++){
         dist[i] = 9999999;
         pai[i] = 9999999;
@@ -76,4 +72,8 @@ void Inicializa(int s,int quantVertices,int dist[],int pai[]){
     dist[s] = 0;
 }
 
-// void Relaxa()
+// void Relaxa();
+
+// void Dijkstra(){
+
+// }
