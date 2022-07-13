@@ -34,7 +34,7 @@ int main (void){
     int quantVertices,numeroLinhas = 0,i=0;
 
     FILE *p;
-    p = fopen("n25.txt","r");
+    p = fopen("n100.txt","r");
     if(p == NULL){
         printf("ERRO! O arquivo nao foi aberto!\n");
         exit(100);
@@ -62,9 +62,7 @@ int main (void){
 
         CriaVetoresAux(quantVertices);
         
-
         Dijkstra(0,quantVertices,numeroLinhas);
-
         for(int i = 0; i < quantVertices;i++){
             printf("dist[%d] = %d\n",i,dist[i]);
         }
@@ -72,10 +70,6 @@ int main (void){
         for(int i = 0; i < quantVertices;i++){
             printf("pai[%d] = %d\n",i,pai[i]);
         }
-        // printf("-----------------------------------\n");
-        // for(int i = 0; i < quantVertices;i++){
-        //     printf("conjQ[%d] = %d\n",i,conjQ[i]);
-        // }
     }
 }
 
@@ -89,8 +83,8 @@ void CriaVetoresAux(int quantVertices){
 //Funcionando
 void Inicializa(int s,int quantVertices){
     for(int i = 0; i < quantVertices;i++){
-        dist[i] = 9999999;
-        pai[i] = 9999999;
+        dist[i] = 9999;
+        pai[i] = 9999;
         conjQ[i] = 1; //Setando todos como verdadeiro(1)
         conjS[i] = 0; //Setando todos como falso(0), pois ainda não conhecemos a menor distância de nenhum vértice
     }
@@ -109,16 +103,14 @@ void Relaxa(int chave, int ligado, int peso){
 }
 
 void Dijkstra(int partida,int quantVertices,int numeroLinhas){
+    int p = 0,u = 0;
     Inicializa(partida,quantVertices);
-    int p = 0;
-    int u = 0;
-    u = extrairMinimo(quantVertices);
-    printf("u = %d\n",u);
-    //Falta a repetição do Enquanto |Q| != 0
-        //while(count < quantVertices){   ----- TESTANDO
+    while(count < quantVertices){
+        u = extrairMinimo(quantVertices);
+        printf("u = %d\n",u);
         //Para cada adjacente...
         for(int i = 0 ; i < numeroLinhas;i++){
-            if(arestas[i].chave == u){
+            if(arestas[i].chave == u){ //Precisa ver com o Iago se é arco direcionado OU Aresta bidirecional -- Se for direcionado está certo
                 Relaxa(arestas[i].chave,arestas[i].ligado,arestas[i].peso);
             }
         }
@@ -126,7 +118,7 @@ void Dijkstra(int partida,int quantVertices,int numeroLinhas){
 }
 //Vertice com menor valor tem que ser EXTRAIDO do conjunto Q
 int extrairMinimo(int quantVertices){
-    int minimo = 999999;
+    int minimo = 99999;
     int verticeMinimo;
     for(int i = 0; i < quantVertices;i++){
         if(conjQ[i] == 1 && dist[i] < minimo){
