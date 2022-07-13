@@ -2,9 +2,13 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include<stdbool.h>
 
 void CriaVetoresAux(int quantVertices);
 void Inicializa(int s,int quantVertices);
+void Relaxa(int chave, int ligado, int peso);
+void Dijkstra(int partida,int quantVertices, int numeroLinhas);
+int extrairMinimo(int quantVertices);
 
 typedef struct {
     int chave;
@@ -17,6 +21,8 @@ Aresta * arestas;
 int * dist;
 int * pai;
 
+int * conjQ; // Distância provisória
+int * conjS; // Distancia mínima garantida
 
 int main (void){
     int ver = 0,lig = 0,pe = 0;
@@ -53,27 +59,68 @@ int main (void){
         printf("numeroLinhas = %d\n",numeroLinhas);
 
         CriaVetoresAux(quantVertices);
+        
 
-        Inicializa(0,quantVertices);
+        Dijkstra(0,quantVertices,numeroLinhas);
 
     }
 }
 
+//Funcionando
 void CriaVetoresAux(int quantVertices){
     dist = malloc(quantVertices * sizeof(int));
     pai = malloc(quantVertices * sizeof(int));
+    conjQ = malloc (quantVertices * sizeof(int));
+    conjS = malloc (quantVertices * sizeof(int));
 }
-
+//Funcionando
 void Inicializa(int s,int quantVertices){
     for(int i = 0; i < quantVertices;i++){
         dist[i] = 9999999;
         pai[i] = 9999999;
+        conjQ[i] = 1; //Setando todos como verdadeiro(1)
+        conjS[i] = 0; //Setando todos como falso(0), pois ainda não conhecemos a menor distância de nenhum vértice
     }
     dist[s] = 0;
+
+    // for(int i = 0 ; i < quantVertices;i++){
+    //     printf("dist[%d] = %d\n",i,dist[i]);
+    // }
 }
 
-// void Relaxa();
+void Relaxa(int chave, int ligado, int peso){
+    if(dist[ligado] > (dist[chave] + peso)){
+        dist[ligado] = dist[chave] + peso;
+        pai[ligado] = chave;
+    }
+}
 
-// void Dijkstra(){
+void Dijkstra(int partida,int quantVertices,int numeroLinhas){
+    Inicializa(partida,quantVertices);
+    int p = 0;
+    int u = 0;
+    u = extrairMinimo(quantVertices);
+    printf("u = %d\n",u);
+    //Falta a repetição do Enquanto |Q| != 0
 
-// }
+    //Para cada adjacente...
+    for(int i = 0 ; i < numeroLinhas;i++){
+        if(arestas[i].chave == u){
+            Relaxa(arestas[i].chave,arestas[i].ligado,arestas[i].peso);
+        }
+    }
+}
+//Vertice com menor valor tem que ser EXTRAIDO do conjunto Q
+int extrairMinimo(int quantVertices){
+    int minimo = 999999;
+    int verticeMinimo;
+    for(int i = 0; i < quantVertices;i++){
+        if(conjQ[i] == 1 && dist[i] < minimo){
+            minimo = dist[i];
+            verticeMinimo = i;
+        }
+    }
+    conjQ[verticeMinimo] = 0;
+    conjS[verticeMinimo] = 1;
+    return verticeMinimo;
+}
