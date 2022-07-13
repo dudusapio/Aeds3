@@ -24,6 +24,8 @@ int * pai;
 int * conjQ; // Distância provisória
 int * conjS; // Distancia mínima garantida
 
+int count = 0;
+
 int main (void){
     int ver = 0,lig = 0,pe = 0;
     char *line_buf = NULL;
@@ -63,6 +65,17 @@ int main (void){
 
         Dijkstra(0,quantVertices,numeroLinhas);
 
+        for(int i = 0; i < quantVertices;i++){
+            printf("dist[%d] = %d\n",i,dist[i]);
+        }
+        printf("-----------------------------------\n");
+        for(int i = 0; i < quantVertices;i++){
+            printf("pai[%d] = %d\n",i,pai[i]);
+        }
+        // printf("-----------------------------------\n");
+        // for(int i = 0; i < quantVertices;i++){
+        //     printf("conjQ[%d] = %d\n",i,conjQ[i]);
+        // }
     }
 }
 
@@ -102,11 +115,12 @@ void Dijkstra(int partida,int quantVertices,int numeroLinhas){
     u = extrairMinimo(quantVertices);
     printf("u = %d\n",u);
     //Falta a repetição do Enquanto |Q| != 0
-
-    //Para cada adjacente...
-    for(int i = 0 ; i < numeroLinhas;i++){
-        if(arestas[i].chave == u){
-            Relaxa(arestas[i].chave,arestas[i].ligado,arestas[i].peso);
+        //while(count < quantVertices){   ----- TESTANDO
+        //Para cada adjacente...
+        for(int i = 0 ; i < numeroLinhas;i++){
+            if(arestas[i].chave == u){
+                Relaxa(arestas[i].chave,arestas[i].ligado,arestas[i].peso);
+            }
         }
     }
 }
@@ -122,5 +136,6 @@ int extrairMinimo(int quantVertices){
     }
     conjQ[verticeMinimo] = 0;
     conjS[verticeMinimo] = 1;
+    count++;
     return verticeMinimo;
 }
