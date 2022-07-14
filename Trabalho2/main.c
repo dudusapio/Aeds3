@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -34,7 +35,7 @@ int main (void){
     int quantVertices,numeroLinhas = 0,i=0;
 
     FILE *p;
-    p = fopen("n100.txt","r");
+    p = fopen("n25.txt","r");
     if(p == NULL){
         printf("ERRO! O arquivo nao foi aberto!\n");
         exit(100);
@@ -42,7 +43,7 @@ int main (void){
     {
         //Criando a quantidade certa de elementos no vetor de structs
         while(getline(&line_buf, &line_buf_size, p) > 0){
-            arestas = malloc(sizeof(Aresta));
+            arestas = (Aresta *) malloc(sizeof(Aresta));
         }
         rewind(p);
         //Lendo a primeira linha
@@ -61,24 +62,27 @@ int main (void){
         printf("numeroLinhas = %d\n",numeroLinhas);
 
         CriaVetoresAux(quantVertices);
-        
-        Dijkstra(0,quantVertices,numeroLinhas);
         for(int i = 0; i < quantVertices;i++){
-            printf("dist[%d] = %d\n",i,dist[i]);
-        }
-        printf("-----------------------------------\n");
-        for(int i = 0; i < quantVertices;i++){
-            printf("pai[%d] = %d\n",i,pai[i]);
+            Dijkstra(i,quantVertices,numeroLinhas);
+            printf("Execução %d\n",i);
+            for(int i = 0; i < quantVertices;i++){
+                printf("dist[%d] = %d\n",i,dist[i]);
+            }
+            printf("-----------------------------------\n");
+            for(int i = 0; i < quantVertices;i++){
+                printf("pai[%d] = %d\n",i,pai[i]);
+            }
+            printf("\n\n");
         }
     }
 }
 
 //Funcionando
 void CriaVetoresAux(int quantVertices){
-    dist = malloc(quantVertices * sizeof(int));
-    pai = malloc(quantVertices * sizeof(int));
-    conjQ = malloc (quantVertices * sizeof(int));
-    conjS = malloc (quantVertices * sizeof(int));
+    dist = (int *) malloc(quantVertices * sizeof(int));
+    pai = (int *) malloc(quantVertices * sizeof(int));
+    conjQ = (int *) malloc (quantVertices * sizeof(int));
+    conjS = (int *) malloc (quantVertices * sizeof(int));
 }
 //Funcionando
 void Inicializa(int s,int quantVertices){
@@ -103,15 +107,19 @@ void Relaxa(int chave, int ligado, int peso){
 }
 
 void Dijkstra(int partida,int quantVertices,int numeroLinhas){
-    int p = 0,u = 0;
+    int u = 0;
     Inicializa(partida,quantVertices);
+    count = 0;
     while(count < quantVertices){
         u = extrairMinimo(quantVertices);
-        printf("u = %d\n",u);
+        //printf("u = %d\n",u);
         //Para cada adjacente...
         for(int i = 0 ; i < numeroLinhas;i++){
             if(arestas[i].chave == u){ //Precisa ver com o Iago se é arco direcionado OU Aresta bidirecional -- Se for direcionado está certo
                 Relaxa(arestas[i].chave,arestas[i].ligado,arestas[i].peso);
+            }
+            if(arestas[i].ligado == u){
+                Relaxa(arestas[i].ligado,arestas[i].chave,arestas[i].peso);
             }
         }
     }
