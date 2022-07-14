@@ -7,6 +7,7 @@
 
 void floydWarshall(int quantVertices);
 void printSolution(int quantVertices);
+void verticesMaior(int quantVertices);
 
 typedef struct {
     int chave;
@@ -17,6 +18,8 @@ typedef struct {
 int ** mat;
 
 int ** dist;
+
+int vertice1,vertice2;
 
 int count = 0;
 
@@ -81,6 +84,13 @@ int main (void){
 
         //Floyd-Warshall 
         floydWarshall(quantVertices);
+        //1. Pegar os vértices que possuem o maior peso do resultado do floydWarshall
+        verticesMaior(quantVertices);
+        printf("vertice1 = %d\n",vertice1);
+        printf("vertice2 = %d\n",vertice2);
+        printf("peso = %d\n",dist[vertice1][vertice2]);
+        //2. Rodar um dijstra a partir de algum desse vértice até o outro vértice.
+        //3. Printar os pais
     }
 }
 
@@ -128,5 +138,18 @@ void printSolution(int quantVertices){
                 printf ("%7d", dist[i][j]);
         }
         printf("\n");
+    }
+}
+
+void verticesMaior(int quantVertices){
+    int i,j,maior = 0;
+    for(i = 0; i < quantVertices; i++){
+        for(j = 0; j < quantVertices; j++){
+            if(dist[i][j] > maior){
+                maior = dist[i][j];
+                vertice1 = i;
+                vertice2 = j;
+            }
+        }
     }
 }
