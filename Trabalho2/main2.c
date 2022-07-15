@@ -7,7 +7,7 @@
 
 void floydWarshall(int quantVertices);
 void printSolution(int quantVertices);
-void verticesMaior(int quantVertices);
+void verticesMaiorPeso(int quantVertices);
 
 //Dijkstra
 void CriaVetoresAux(int quantVertices);
@@ -38,7 +38,7 @@ int vertice1,vertice2;
 
 int count = 0;
 
-int main (void){
+int main (int argc, char *argv[]){
     int ver = 0,lig = 0,pe = 0;
     char *line_buf = NULL;
     size_t line_buf_size = 0;
@@ -46,7 +46,7 @@ int main (void){
     int quantVertices,numeroLinhas = 0,i=0,j = 0;
 
     FILE *p;
-    p = fopen("n1000.txt","r");
+    p = fopen(argv[1],"r");
     if(p == NULL){
         printf("ERRO! O arquivo nao foi aberto!\n");
         exit(100);
@@ -100,7 +100,7 @@ int main (void){
         //Floyd-Warshall 
         floydWarshall(quantVertices);
         //1. Pegar os vértices que possuem o maior peso do resultado do floydWarshall
-        verticesMaior(quantVertices);
+        verticesMaiorPeso(quantVertices);
         printf("vertice1 = %d\n",vertice1);
         printf("vertice2 = %d\n",vertice2);
         
@@ -111,6 +111,7 @@ int main (void){
         //     printf("distancia[%2d] = %7d | pai[%2d] = %7d\n",i,distancia[i],i,pai[i]);
         // }
         int x = vertice2;
+        printf("%s\n",argv[1]);
         printf("%d ",vertice2);
         while(x != vertice1){
             printf("%d ",pai[x]);
@@ -129,12 +130,15 @@ void floydWarshall(int quantVertices){
         dist[i] = (int *) malloc(quantVertices * sizeof(int));
     }
 
+    //Populando a matriz dist com os valores que estão em mat
     for(i = 0;i < quantVertices;i++){
         for(j = 0;j < quantVertices;j++){
             dist[i][j] = mat[i][j];
         }
     }
 
+
+    //Código apenas para teste
     FILE * arquivo1 = fopen("dist.txt","w");
     for(int i = 0 ; i < quantVertices;i++){
         fprintf(arquivo1,"\n");
@@ -155,6 +159,7 @@ void floydWarshall(int quantVertices){
     //printSolution(quantVertices);
 }
 
+//Exibe a solucao do FloydWarshall
 void printSolution(int quantVertices){
     for (int i = 0; i < quantVertices; i++){
         for (int j = 0; j < quantVertices; j++){
@@ -167,7 +172,9 @@ void printSolution(int quantVertices){
     }
 }
 
-void verticesMaior(int quantVertices){
+//vertice1 guarda a linha da posicao de maior peso
+//Vertice 2 guarda a coluna da posicao de maior peso
+void verticesMaiorPeso(int quantVertices){
     int i,j,maior = 0;
     for(i = 0; i < quantVertices; i++){
         for(j = 0; j < quantVertices; j++){
@@ -182,14 +189,13 @@ void verticesMaior(int quantVertices){
 
 //Dijkstra
 
-//Funcionando para o n1000.txt
 void CriaVetoresAux(int quantVertices){
     distancia = (int *) malloc(quantVertices * sizeof(int));
     pai = (int *) malloc(quantVertices * sizeof(int));
     conjQ = (int *) malloc (quantVertices * sizeof(int));
     conjS = (int *) malloc (quantVertices * sizeof(int));
 }
-//Funcionando para o n1000.txt
+
 void Inicializa(int s,int quantVertices){
     for(int i = 0; i < quantVertices;i++){
         distancia[i] = 9999;
@@ -207,20 +213,6 @@ void Relaxa(int chave, int ligado, int peso){
     }
 }
 
-// void Dijskstra(int partida,int destino,int quantVertices){
-//     int u = 0,j;
-//     CriaVetoresAux(quantVertices);
-//     Inicializa(vertice1,quantVertices);
-//     while(conjS[vertice2] != 1){ // Ou seja, enquanto não sabemos a menor distância garantida do vertice 2 continuamos executar
-//         u = extrairMinimo(quantVertices);
-//         for(j = 0; j < quantVertices ; j++){
-//             if(mat[partida][j] != 99999 || mat[partida][j] != 0){
-//                 Relaxa(partida,j,mat[partida][j]);
-//             }
-//         }
-//     }
-// }
-
 void Dijskstra(int partida,int destino,int quantVertices){
     int u = 0,i,j;
     CriaVetoresAux(quantVertices);
@@ -236,7 +228,6 @@ void Dijskstra(int partida,int destino,int quantVertices){
         }
     }
 }
-
 
 int extrairMinimo(int quantVertices){
     int minimo = 99999;
