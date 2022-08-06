@@ -42,7 +42,7 @@ Aresta resultado[2];
 int main (void){
     int z = 0,x = 0,y = 0;
     char *line_buf = NULL;
-    ssize_t line_buf_size = 0;
+    size_t line_buf_size = 0;
 
     int **matriz;
     FILE *p;

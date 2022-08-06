@@ -11,6 +11,9 @@ int extrairMinimo(int numerolinhas);
 void criaAGM(int numerolinhas,int raiz);
 void printaAGM(int numerolinhas);
 
+void maiorSubGrafoInduzido(int numerolinhas);
+void printmaiorSubGrafoInduzido();
+
 void quick_sort(int left,int right);
 typedef struct {
     int chave;
@@ -43,7 +46,7 @@ int * q;
 Aresta * AGM;
 
 //Maior subgrafo induzido
-Aresta * MaiorSubInduz;
+Aresta * maiorSubInduz;
 
 //Iniciando a lista das arestas
 
@@ -106,6 +109,8 @@ int main (int argc, char *argv[]){
         quick_sort(0,numerolinhas - 1);
         printaAGM(numerolinhas);
         printf("--------------------------------------\n");
+        maiorSubGrafoInduzido(numerolinhas);
+        printmaiorSubGrafoInduzido();
     }
 }
 
@@ -219,7 +224,60 @@ void quick_sort(int left,int right){
 }
 
 
-// void maiorSubGrafoInduzido(int numerolinhas){
-//     MaiorSubInduz = malloc(4 * sizeof(Aresta));
+void maiorSubGrafoInduzido(int numerolinhas){
+    int j = 0, x = 0, y = 2, q = 0;
 
-// }
+    maiorSubInduz = malloc(4 * sizeof(Aresta));
+
+    int grau[2][5];
+    for(int i = 0; i < 2;i++){
+        for(int j = 0; j < 5;j++){
+            grau[i][j] = 999999;
+        }
+    }
+
+    maiorSubInduz[x] = AGM[0];
+    grau[0][0] = AGM[0].chave;
+    grau[0][1] = AGM[0].ligado;
+    grau[1][0] = 1;
+    grau[1][1] = 1;
+
+    for(int i = 1; i < numerolinhas - 1 && y < 5;i++){
+        while(j < 5 && q == 0){
+            if(AGM[i].chave == grau[0][j]){
+                if(grau[1][j] < 3){
+                    x++;
+                    maiorSubInduz[x] = AGM[i]; //Inserindo aresta na resposta final
+                    grau[0][y] = AGM[i].ligado;   //Colocando o novo vértice na matriz
+                    grau[1][y] = 1;              //Grau do novo vértice = 1
+                    grau[1][j] = grau[1][j] + 1; // Grau do vértice que já existe = +1
+                    y++;
+                    q = 1;
+                }
+            }
+            if(AGM[i].ligado == grau[0][j]){
+                if(grau[1][j] < 3){
+                    x++;
+                    maiorSubInduz[x] = AGM[i]; //Inserindo aresta na resposta final
+                    grau[0][y] = AGM[i].chave;   //Colocando o novo vértice na matriz
+                    grau[1][y] = 1;              //Grau do novo vértice = 1
+                    grau[1][j] = grau[1][j] + 1; // Grau do vértice que já existe = +1
+                    y++;
+                    q = 1;
+                }
+            }
+            j++;
+        }
+        j = 0;  
+        q = 0;
+    }
+    // for(int i = 0; i <5;i++){
+    //     printf("%d ",grau[0][i]);
+    // }
+}
+
+void printmaiorSubGrafoInduzido(){
+    for(int i = 0; i < 4;i++){
+        printf("chave = %d ligado = %d  peso = %.2f\n",maiorSubInduz[i].chave,maiorSubInduz[i].ligado,maiorSubInduz[i].peso);
+    }
+}

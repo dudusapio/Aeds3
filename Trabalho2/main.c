@@ -95,7 +95,7 @@ int main (int argc, char *argv[]){
             printf("%d ",pai[x]);
             x = pai[x];
         }
-        printf("\npeso = %d",dist[vertice1][vertice2]);
+        printf("\npeso = %d\n",dist[vertice1][vertice2]);
     }
 }
 
