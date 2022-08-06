@@ -11,6 +11,7 @@ int extrairMinimo(int numerolinhas);
 void criaAGM(int numerolinhas,int raiz);
 void printaAGM(int numerolinhas);
 
+void quick_sort(int left,int right);
 typedef struct {
     int chave;
     int ligado;
@@ -40,6 +41,9 @@ int * q;
 //AGM
 
 Aresta * AGM;
+
+//Maior subgrafo induzido
+Aresta * MaiorSubInduz;
 
 //Iniciando a lista das arestas
 
@@ -95,7 +99,13 @@ int main (int argc, char *argv[]){
         int total = populando(&matrizAdjacencia[0][0],numerolinhas);
         printf("total = %d\n",total);
         criaAGM(numerolinhas,0);
+        printf("Antes da ordenacao :\n");
         printaAGM(numerolinhas);
+        printf("--------------------------------------\n");
+        printf("Depois da ordenacao :\n");
+        quick_sort(0,numerolinhas - 1);
+        printaAGM(numerolinhas);
+        printf("--------------------------------------\n");
     }
 }
 
@@ -175,3 +185,41 @@ void printaAGM(int numerolinhas){
         printf("AGM[%d]  chave = %d  ligado = %d  peso = %.2f\n",i,AGM[i].chave,AGM[i].ligado,AGM[i].peso);
     }
 }
+
+void quick_sort(int left,int right){
+    int i,j;
+    double x;
+    Aresta y;
+
+    i = left;
+    j = right;
+    x = AGM[(left + right) / 2].peso;
+
+    while(i <= j){
+        while(AGM[i].peso > x && i < right){
+            i++;
+        }
+        while(AGM[j].peso < x && j > left){
+            j--;
+        }
+        if(i <= j){
+            y = AGM[i];
+            AGM[i] = AGM[j];
+            AGM[j] = y;
+            i++;
+            j--;
+        }
+    }
+    if(j > left){
+        quick_sort(left,j);
+    }
+    if(i < right){
+        quick_sort(i,right);
+    }
+}
+
+
+// void maiorSubGrafoInduzido(int numerolinhas){
+//     MaiorSubInduz = malloc(4 * sizeof(Aresta));
+
+// }
