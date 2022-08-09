@@ -176,7 +176,7 @@ void criaAGM(int numerolinhas,int raiz){
         }
         for(int j = 0; j < numerolinhas;j++){ //Para cada adjacente do vertice U
             if(matrizAdjacencia[u][j] != 0 && q[j] != 1){
-                if(matrizAdjacencia[u][j] < chave[j]){
+                if(matrizAdjacencia[u][j] > chave[j]){
                     chave[j] = matrizAdjacencia[u][j];
                     pai[j] = u;
                 } 
