@@ -38,7 +38,6 @@ int main (int argc, char *argv[]){
         while(getline(&line_buf, &line_buf_size, p) > 0){
             numerolinhas++;
         }
-        printf("numero de linhas = %d\n\n",numerolinhas);
         fclose(p);
         p = fopen(argv[1],"r");
         matriz = calloc(numerolinhas, numerolinhas * sizeof(int*));
@@ -74,7 +73,6 @@ int main (int argc, char *argv[]){
         subGrafo = malloc(4 * sizeof(Aresta));
 
         maiorSubGrafo(numerolinhas);
-        printf("-------------------\n");
         heuristicaBuscaLocal(numerolinhas);
     }
 } 
@@ -84,7 +82,6 @@ void maiorSubGrafo(int numerolinhas){
     int x = 0;
     int div = numerolinhas/3;
     int count = 0;
-    //for(int i = 0; i < numerolinhas;i = i + div){
     for(int i = 0; i < 3;i++){    
         for(int j = count; j < div + count && j < numerolinhas;j++){
             if(matrizAdjacencia[0][j] > maior){
@@ -109,14 +106,19 @@ void maiorSubGrafo(int numerolinhas){
     subGrafo[x].chave = indiceJ;
     subGrafo[x].ligado = indiceJ2;
     subGrafo[x].peso = maior;
-    printMaiorSubGrafo();
+    //printMaiorSubGrafo();
 }
 
 
 void printMaiorSubGrafo(){
+    float peso = 0;
+    int vertices,x = 0;
     for(int i = 0 ; i < 4;i++){
-        printf("chave = %d  ligado = %d  peso = %.2f\n",subGrafo[i].chave,subGrafo[i].ligado,subGrafo[i].peso);
+        peso += subGrafo[i].peso;
+        //printf("chave = %d  ligado = %d  peso = %.2f\n",subGrafo[i].chave,subGrafo[i].ligado,subGrafo[i].peso);
     }
+    printf("%d %d %d %d %d\n",subGrafo[0].chave,subGrafo[0].ligado,subGrafo[1].ligado,subGrafo[2].ligado,subGrafo[3].ligado);
+    printf("%.2f\n",peso);
 }
 
 
